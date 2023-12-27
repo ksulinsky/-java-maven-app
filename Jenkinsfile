@@ -30,11 +30,6 @@ pipeline {
 
         stage('Test') {
             steps {
-                when {
-                    expression {
-                        params.ExecuteTests == true
-                    }
-                }
                 // This stage could include commands to run your tests
                 echo 'Testing...'
             }
@@ -53,4 +48,15 @@ pipeline {
         }
     }
 
+    post {
+        always {
+            // Cleanup or post-processing steps
+        }
+        success {
+            echo 'Build and deployment successful!'
+        }
+        failure {
+            echo 'Build or deployment failed!'
+        }
+    }
 }
