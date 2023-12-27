@@ -17,7 +17,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // This stage checks out the code from your version control system
                 checkout scm
             }
         }
@@ -30,19 +29,16 @@ pipeline {
 
         stage('Test') {
             steps {
-                // This stage could include commands to run your tests
                 echo 'Testing...'
             }
         }
 
         stage('Deploy') {
             steps {
-                // This stage could include commands to deploy your application
                 echo 'Deploying...'
 
                 withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PWD')]) {
                     echo "Deploying with version ${VERSION}"
-                    // Example: sh "deploy-script.sh -v ${VERSION} -u ${USERNAME} -p ${PWD}"
                 }
             }
         }
@@ -50,7 +46,7 @@ pipeline {
 
     post {
         always {
-            // Empty block for the always section
+            echo 'Always block executed.'
         }
         success {
             echo 'Build and deployment successful!'
