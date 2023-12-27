@@ -53,15 +53,4 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            // Cleanup or post-processing steps
-        }
-        success {
-            echo 'Build and deployment successful!'
-        }
-        failure {
-            echo 'Build or deployment failed!'
-        }
-    }
 }
