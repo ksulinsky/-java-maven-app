@@ -50,7 +50,7 @@ pipeline {
 
     post {
         always {
-            // Cleanup or post-processing steps
+            // Empty block for the always section
         }
         success {
             echo 'Build and deployment successful!'
