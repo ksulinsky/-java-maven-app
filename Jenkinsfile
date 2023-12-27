@@ -1,38 +1,33 @@
-def gv
-
 pipeline {
     agent any
+
     stages {
-        stage("init") {
+        stage('Checkout') {
             steps {
-                script {
-                    gv = load "script.groovy"
-                }
+                // This stage checks out the code from your version control system
+                checkout scm
             }
         }
-        stage("build jar") {
+
+        stage('Build') {
             steps {
-                script {
-                    echo "building jar"
-                    //gv.buildJar()
-                }
+            echo 'building...'
             }
         }
-        stage("build image") {
+
+        stage('Test') {
             steps {
-                script {
-                    echo "building image"
-                    //gv.buildImage()
-                }
+                // This stage could include commands to run your tests
+                echo 'testing...'
             }
         }
-        stage("deploy") {
+
+        stage('Deploy') {
             steps {
-                script {
-                    echo "deploying"
-                    //gv.deployApp()
-                }
+                // This stage could include commands to deploy your application
+                sh 'deploying...'
             }
         }
-    }   
+    }
+
 }
