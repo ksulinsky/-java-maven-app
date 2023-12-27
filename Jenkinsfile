@@ -25,7 +25,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 // This stage could include commands to deploy your application
-                sh 'deploying...'
+                echo 'deploying...'
             }
         }
     }
