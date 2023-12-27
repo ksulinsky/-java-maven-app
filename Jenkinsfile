@@ -2,16 +2,16 @@ pipeline {
     agent any
     tools {
         maven 'Maven'
-
     }
 
-parameters {
-choice(name: 'VERSION: ', choices: ['1.1.0', '1.2.0', '1.3.0'], description: '')
-booleanParam(name: 'ExecuteTests', defaultValue: true, description: '')
-}
+    parameters {
+        choice(name: 'VERSION', choices: ['1.1.0', '1.2.0', '1.3.0'], description: 'Select the version')
+        booleanParam(name: 'ExecuteTests', defaultValue: true, description: 'Run tests')
+    }
+
     environment {
-        NEW_VERSION='1.3.0'
-        SERVER_CREDENTIALS=credentials('docker-credentials')
+        NEW_VERSION = '1.3.0'
+        SERVER_CREDENTIALS = credentials('docker-credentials')
     }
 
     stages {
@@ -24,7 +24,7 @@ booleanParam(name: 'ExecuteTests', defaultValue: true, description: '')
 
         stage('Build') {
             steps {
-            echo 'building...'
+                echo 'Building...'
             }
         }
 
@@ -36,30 +36,32 @@ booleanParam(name: 'ExecuteTests', defaultValue: true, description: '')
                     }
                 }
                 // This stage could include commands to run your tests
-                echo 'testing...'
+                echo 'Testing...'
             }
         }
 
         stage('Deploy') {
             steps {
                 // This stage could include commands to deploy your application
-                echo 'deploying...'
-                 withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USERNAME', password: 'PWD')]) {
-                echo "Deploying with version ${VERSION}"
+                echo 'Deploying...'
 
+                withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PWD')]) {
+                    echo "Deploying with version ${VERSION}"
+                    // Example: sh "deploy-script.sh -v ${VERSION} -u ${USERNAME} -p ${PWD}"
+                }
             }
         }
     }
+
     post {
-    always { 
-    
-    }
+        always {
+            // Cleanup or post-processing steps
+        }
         success {
-            
+            echo 'Build and deployment successful!'
         }
         failure {
-            
+            echo 'Build or deployment failed!'
         }
     }
-}
 }
