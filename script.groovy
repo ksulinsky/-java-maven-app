@@ -1,9 +1,9 @@
-Def build_app() {
+def build_app() {
              echo 'Building...'
              sh "mvn package"
 }
 
-Def buildDockerImage() {
+def buildDockerImage() {
          // Bind the Docker credentials
             withCredentials([usernamePassword(credentialsId: 'docker-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
             echo 'Building docker image and pushing it...'
