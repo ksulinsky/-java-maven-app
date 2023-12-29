@@ -1,19 +1,17 @@
-def buildJar() {
-    echo "building the application..."
-    sh 'mvn package'
-} 
+Def build_app() {
+             echo 'Building...'
+             sh "mvn package"
+}
 
-def buildImage() {
-    echo "building the docker image..."
-    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-        sh 'docker build -t nanajanashia/demo-app:jma-2.0 .'
-        sh "echo $PASS | docker login -u $USER --password-stdin"
-        sh 'docker push nanajanashia/demo-app:jma-2.0'
-    }
-} 
+Def buildDockerImage() {
+         // Bind the Docker credentials
+            withCredentials([usernamePassword(credentialsId: 'docker-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+            echo 'Building docker image and pushing it...'
+            sh "docker build -t maven-java-app:1.0 ."
+            sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
+            sh 'docker push ksulinsky/repository:maven-java-app'
+                    }
 
-def deployApp() {
-    echo 'deploying the application...'
-} 
+}
 
 return this
