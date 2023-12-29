@@ -34,7 +34,7 @@ pipeline {
                         sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
                         
                         echo 'Pushing the Docker image to the private repository...'
-                        sh 'docker push ksulinsky/repository:maven-java-app'
+                        sh 'docker push ksulinsky/repository:jma-1.0'
                     }
                 }
             }
