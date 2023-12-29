@@ -29,13 +29,12 @@ pipeline {
         }
 
         stage('Test') {
-                            when {
-                    expression {
-                        params.ExecuteTests == true
-                    }
+            when {
+                expression {
+                    params.ExecuteTests == true
                 }
+            }
             steps {
-
                 // This stage could include commands to run your tests
                 echo 'Testing...'
             }
@@ -47,19 +46,18 @@ pipeline {
                 ok "Done"
                 choice(name: 'ENV', choices: ['dev', 'test', 'prod'], description: 'Select the environment')
             }
-            
+
             steps {
-                // This stage could include commands to deploy your application
-                echo "Deploying in environment ${ENV}"
+                script {
+                    // This stage could include commands to deploy your application
+                    echo "Deploying in environment ${ENV}"
 
-                
-
-                withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PWD')]) {
-                    echo "Deploying with version ${VERSION}"
-                    // Example: sh "deploy-script.sh -v ${VERSION} -u ${USERNAME} -p ${PWD}"
+                    withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PWD')]) {
+                        echo "Deploying with version ${VERSION}"
+                        // Example: sh "deploy-script.sh -v ${VERSION} -u ${USERNAME} -p ${PWD}"
+                    }
                 }
             }
         }
     }
-
 }
