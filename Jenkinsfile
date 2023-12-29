@@ -43,7 +43,6 @@ pipeline {
 
         stage('Deploy') {
             input {
-                echo 'Deploying...'
                 message "Select environment to deploy:"
                 ok "Done"
                 choice(name: 'ENV', choices: ['dev', 'test', 'prod'], description: 'Select the environment')
