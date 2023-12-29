@@ -17,7 +17,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // This stage checks out the code from your version control system
                 checkout scm
             }
         }
@@ -35,22 +34,25 @@ pipeline {
                 }
             }
             steps {
-                // This stage could include commands to run your tests
                 echo 'Testing...'
             }
         }
 
         stage('Deploy') {
-            input {
-                message "Select environment to deploy:"
-                ok "Done"
-                choice(name: 'ENV', choices: ['dev', 'test', 'prod'], description: 'Select the environment')
-            }
-
             steps {
                 script {
-                    // This stage could include commands to deploy your application
-                    echo "Deploying in environment ${ENV}"
+                    def userInput = input(
+                        id: 'deployInput',
+                        message: 'Select environment to deploy:',
+                        parameters: [choice(choices: ['dev', 'test', 'prod'], description: 'Select the environment', name: 'ENV')]
+                    )
+                    
+                    echo "Deploying in environment ${userInput.ENV}"
+
+                    if (userInput.ENV == 'prod') {
+                        // Additional deployment steps for the production environment
+                        echo "Executing production deployment steps..."
+                    }
 
                     withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PWD')]) {
                         echo "Deploying with version ${VERSION}"
