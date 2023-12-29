@@ -47,7 +47,8 @@ stage('Deploy') {
                 parameters: [choice(choices: ['dev', 'test', 'prod'], description: 'Select the environment', name: 'ENV')]
             )
             
-            def selectedEnvironment = userInput.ENV
+            // Access the selected environment using the userInput
+            def selectedEnvironment = userInput['ENV']
             echo "Deploying in environment ${selectedEnvironment}"
 
             if (selectedEnvironment == 'prod') {
@@ -62,5 +63,6 @@ stage('Deploy') {
         }
     }
 }
+
 }
 }
