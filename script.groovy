@@ -9,7 +9,7 @@ def buildDockerImage() {
         echo 'Building docker image and pushing it...'
         sh "docker build -t maven-java-app:1.0 ."
         sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
-        sh 'docker push ksulinsky/repository:maven-java-app'
+        sh 'docker push ksulinsky/repository:jma-1.0'
     }
 }
 
