@@ -38,28 +38,29 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                script {
-                    def userInput = input(
-                        id: 'deployInput',
-                        message: 'Select environment to deploy:',
-                        parameters: [choice(choices: ['dev', 'test', 'prod'], description: 'Select the environment', name: 'ENV')]
-                    )
-                    
-                    echo "Deploying in environment ${userInput.ENV}"
+stage('Deploy') {
+    steps {
+        script {
+            def userInput = input(
+                id: 'deployInput',
+                message: 'Select environment to deploy:',
+                parameters: [choice(choices: ['dev', 'test', 'prod'], description: 'Select the environment', name: 'ENV')]
+            )
+            
+            def selectedEnvironment = userInput.ENV
+            echo "Deploying in environment ${selectedEnvironment}"
 
-                    if (userInput.ENV == 'prod') {
-                        // Additional deployment steps for the production environment
-                        echo "Executing production deployment steps..."
-                    }
+            if (selectedEnvironment == 'prod') {
+                // Additional deployment steps for the production environment
+                echo "Executing production deployment steps..."
+            }
 
-                    withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PWD')]) {
-                        echo "Deploying with version ${VERSION}"
-                        // Example: sh "deploy-script.sh -v ${VERSION} -u ${USERNAME} -p ${PWD}"
-                    }
-                }
+            withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PWD')]) {
+                echo "Deploying with version ${VERSION}"
+                // Example: sh "deploy-script.sh -v ${VERSION} -u ${USERNAME} -p ${PWD}"
             }
         }
     }
+}
+}
 }
