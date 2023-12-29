@@ -17,6 +17,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                // This stage checks out the code from your version control system
                 checkout scm
             }
         }
@@ -28,31 +29,29 @@ pipeline {
         }
 
         stage('Test') {
+                            when {
+                    expression {
+                        params.ExecuteTests == true
+                    }
+                }
             steps {
+
+                // This stage could include commands to run your tests
                 echo 'Testing...'
             }
         }
 
         stage('Deploy') {
             steps {
+                // This stage could include commands to deploy your application
                 echo 'Deploying...'
 
                 withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PWD')]) {
                     echo "Deploying with version ${VERSION}"
+                    // Example: sh "deploy-script.sh -v ${VERSION} -u ${USERNAME} -p ${PWD}"
                 }
             }
         }
     }
 
-    post {
-        always {
-            echo 'Always block executed.'
-        }
-        success {
-            echo 'Build and deployment successful!'
-        }
-        failure {
-            echo 'Build or deployment failed!'
-        }
-    }
 }
