@@ -45,6 +45,12 @@ pipeline {
             steps {
                 // This stage could include commands to deploy your application
                 echo 'Deploying...'
+                message "Select environment to deploy:"
+                ok "Done"
+                parameters {
+                    choice(name: 'ENV', choices: ['test', 'dev', 'prod'], description: 'Select the version')
+                }
+                echo " You selected ${ENV} !"
 
                 withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PWD')]) {
                     echo "Deploying with version ${VERSION}"
