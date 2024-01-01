@@ -1,4 +1,3 @@
-@Library('groovy_project') _
 pipeline {
     agent any
     tools {
@@ -21,7 +20,7 @@ pipeline {
             steps {
                 script {
                     // Load the script.groovy file globally
-                    //customScript = load 'script.groovy'
+                    customScript = load 'script.groovy'
                 }
             }
         }
@@ -29,7 +28,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    build_app()
+                    customScript.build_app()
                 }
             }
         }
@@ -37,7 +36,7 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script {
-                    buildDockerImage()
+                    customScript.buildDockerImage()
                 }
             }
         }
