@@ -4,6 +4,10 @@ pipeline {
         maven 'Maven'
     }
 
+    environment {
+        DOCKER_CREDENTIALS = credentials('docker-credentials')
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -12,27 +16,28 @@ pipeline {
             }
         }
 
-        stage('Build') {
-            when {
-                expression {
-                    return env.BRANCH_NAME == 'master'
-                }
-            }
-
+        stage('Initialize') {
             steps {
-                echo "Building..."
+                script {
+                    // Load the script.groovy file globally
+                    customScript = load 'script.groovy'
+                }
             }
         }
 
-        stage('Test') {
-            when {
-                expression {
-                    return env.BRANCH_NAME == 'master'
+        stage('Build') {
+            steps {
+                script {
+                    customScript.build_app()
                 }
             }
+        }
 
+        stage('Build docker image') {
             steps {
-                echo "Testing..."
+                script {
+                    customScript.buildDockerImage()
+                }
             }
         }
     }
