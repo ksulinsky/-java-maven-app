@@ -21,7 +21,7 @@ pipeline {
             steps {
                 script {
                     // Load the script.groovy file globally
-                    customScript = load 'script.groovy'
+                    //customScript = load 'script.groovy'
                 }
             }
         }
