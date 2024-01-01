@@ -13,4 +13,15 @@ def buildDockerImage() {
     }
 }
 
+def incrementVersion() {
+    script {
+        // Increment the major version using the versions-maven-plugin and build-helper-maven-plugin
+        sh '''
+            mvn build-helper:parse-version versions:set \
+                -DnewVersion=${parsedVersion.majorVersion + 1}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion} \
+                versions:commit
+        '''
+    }
+}
+
 return this
