@@ -1,4 +1,4 @@
-@Library('groovy_project') _
+@Library('groovy_project:1.0') _
 pipeline {
     agent any
     tools {
