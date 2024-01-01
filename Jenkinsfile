@@ -1,5 +1,6 @@
 pipeline {
     agent any
+
     tools {
         maven 'Maven'
     }
@@ -25,6 +26,15 @@ pipeline {
             }
         }
 
+        stage('Version Increment') {
+            steps {
+                script {
+                    // Load the script.groovy file globally
+                    customScript.incrementVersion()
+                }
+            }
+        }
+
         stage('Build') {
             steps {
                 script {
@@ -33,7 +43,7 @@ pipeline {
             }
         }
 
-        stage('Build docker image') {
+        stage('Build Docker Image') {
             steps {
                 script {
                     customScript.buildDockerImage()
