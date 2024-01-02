@@ -26,14 +26,6 @@ pipeline {
             }
         }
 
-        stage('Version Increment') {
-            steps {
-                script {
-                    // Load the script.groovy file globally
-                    customScript.incrementVersion()
-                }
-            }
-        }
 
         stage('Build') {
             steps {
