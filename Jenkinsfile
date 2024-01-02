@@ -1,3 +1,4 @@
+#!/usr/bin/env groovy
 pipeline {
     agent any
 
@@ -42,5 +43,12 @@ pipeline {
                 }
             }
         }
+                stage('Commit_version_changes') {
+                    steps {
+                        script {
+                            customScript.commitVersion()
+                        }
+                    }
+                }
     }
 }
