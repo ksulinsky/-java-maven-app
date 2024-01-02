@@ -1,6 +1,9 @@
 #!/usr/bin/env groovy
 pipeline {
     agent any
+    triggers {
+        pollSCM('* * * * *') // Poll every minute
+    }
 
     tools {
         maven 'Maven'
