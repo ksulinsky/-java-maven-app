@@ -27,6 +27,9 @@ def commitVersion() {
         echo "Setting Git remote URL..."
         sh "git remote set-url origin https://${USERNAME}:${PASSWORD}@github.com/ksulinsky/-java-maven-app.git"
         sh "git checkout jenkins_commit"
+        //login as jenkins user
+        sh 'git config --global user.email "jenkins@example.com"'
+        sh 'git config --global user.name "jenkins"'
 
         // Pull changes and handle conflicts
         try {
