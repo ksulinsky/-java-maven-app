@@ -23,16 +23,35 @@ def buildDockerImage() {
 
 def commitVersion() {
     withCredentials([usernamePassword(credentialsId: '5b637be4-a5d9-4402-abfc-cf9d8d6b41c3', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-        sh "git config --global user.email 'jenkins@example.com'"
-        sh "git config --global user.name 'jenkins'"
         echo "Setting Git remote URL..."
         sh "git remote set-url origin https://${USERNAME}:${PASSWORD}@github.com/ksulinsky/-java-maven-app.git"
         sh "git checkout jenkins_commit"
-        sh 'git pull'
-        echo 'Committing version changes...'
-        sh 'git add .'
-        sh 'git commit -m "version update"'
-        sh 'git push origin jenkins_commit'
+
+        // Pull changes and handle conflicts
+        try {
+            sh 'git pull origin jenkins_commit -X theirs'
+        } catch (Exception ex) {
+            echo "Failed to pull changes: ${ex.message}"
+            // Handle the failure (e.g., exit the script or take appropriate actions)
+        }
+
+        sh 'git status'
+
+        // Check if there are changes in the working directory
+        def hasChanges = sh(script: 'git diff --exit-code', returnStatus: true) == 1
+
+        if (hasChanges) {
+            sh 'git add .'
+            sh 'git status' // Check again after adding changes
+
+            // Commit with author information
+            sh 'git commit -m "version update" --author="jenkins <jenkins@example.com>"'
+
+            // Push to the branch
+            sh 'git push origin jenkins_commit'
+        } else {
+            echo 'No changes to commit.'
+        }
     }
 }
 
