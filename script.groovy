@@ -23,6 +23,8 @@ def buildDockerImage() {
 
 def commitVersion() {
     withCredentials([usernamePassword(credentialsId: '5b637be4-a5d9-4402-abfc-cf9d8d6b41c3', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+        git config --global user.email "jenkins@example.com"
+        git config --global user.name "jenkins"
         echo "Setting Git remote URL..."
         sh "git remote set-url origin https://${USERNAME}:${PASSWORD}@github.com/ksulinsky/-java-maven-app.git"
         sh "git checkout jenkins_commit"
