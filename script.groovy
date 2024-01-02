@@ -25,10 +25,10 @@ def commitVersion() {
     withCredentials([usernamePassword(credentialsId: '5b637be4-a5d9-4402-abfc-cf9d8d6b41c3', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
         sh "git config --global user.email 'jenkins@example.com'"
         sh "git config --global user.name 'jenkins'"
-        sh 'git pull origin jenkins_commit'
         echo "Setting Git remote URL..."
         sh "git remote set-url origin https://${USERNAME}:${PASSWORD}@github.com/ksulinsky/-java-maven-app.git"
         sh "git checkout jenkins_commit"
+        sh 'git pull'
         echo 'Committing version changes...'
         sh 'git add .'
         sh 'git commit -m "version update"'
