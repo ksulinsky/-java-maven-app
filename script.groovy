@@ -2,7 +2,6 @@
 
 import javax.print.attribute.standard.JobOriginatingUserName
 
-
 def build_app() {
     echo 'Building...'
     sh "mvn package"
@@ -13,6 +12,7 @@ def buildDockerImage() {
     def mavenVersion = sh(script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true).trim()
     def dockerImageTag = "ksulinsky/repository:jma-${mavenVersion}"
     echo "Building docker image with tag: ${dockerImageTag}"
+    env.dockerImageTag = dockerImageTag
 
     withCredentials([usernamePassword(credentialsId: 'docker-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
         echo 'Building docker image and pushing it...'
@@ -56,6 +56,12 @@ def commitVersion() {
         } else {
             echo 'No changes to commit.'
         }
+    }
+}
+
+def deployApplication() {
+    sshagent(['aws']) {
+        ssh 'ec2-user@3.70.229.201', "docker run -p 8080:8080 -d ${env.dockerImageTag}"
     }
 }
 

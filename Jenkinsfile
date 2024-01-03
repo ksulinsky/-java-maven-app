@@ -30,8 +30,7 @@ pipeline {
             }
         }
 
-
-        stage('Build') {
+        stage('Build Application') {
             steps {
                 script {
                     customScript.build_app()
@@ -46,12 +45,21 @@ pipeline {
                 }
             }
         }
-                stage('Commit_version_changes') {
-                    steps {
-                        script {
-                            customScript.commitVersion()
-                        }
-                    }
+
+        stage('Commit Version Changes') {
+            steps {
+                script {
+                    customScript.commitVersion()
                 }
+            }
+        }
+
+        stage('Deploy Application') {
+            steps {
+                script {
+                    customScript.deployApplication()
+                }
+            }
+        }
     }
 }
