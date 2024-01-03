@@ -61,7 +61,9 @@ def commitVersion() {
 
 def deployApplication() {
     sshagent(['aws']) {
-        ssh user: 'ec2-user', host: '3.70.229.201', command: 'ls -la'
+        //ssh user: 'ec2-user', host: '3.70.229.201', command: 'ls -la'
+        def remoteCommand = "docker run -p 8080:8080 -d ${env.dockerImageTag}"
+        ssh user: 'ec2-user', host: '3.70.229.201', command: remoteCommand
         //ssh 'ec2-user@3.70.229.201', """docker run -p 8080:8080 -d ${env.dockerImageTag}"""
     }
 }
