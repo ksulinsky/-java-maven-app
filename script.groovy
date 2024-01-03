@@ -64,7 +64,7 @@ def deployApplication() {
         // Convert env.dockerImageTag to lowercase
         def lowercaseImageTag = env.dockerImageTag.toLowerCase()
 
-        // ssh command with lowercase env.dockerImageTag
+         ssh command with lowercase env.dockerImageTag
         def remoteCommand = "docker run -p 8080:8080 -d ${lowercaseImageTag}"
         ssh user: 'ec2-user', host: '3.70.229.201', command: remoteCommand
     }
