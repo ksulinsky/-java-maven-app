@@ -61,17 +61,21 @@ def commitVersion() {
 
 def deployApplication() {
     sshagent(['aws']) {
+        // ... other commands ...
+        echo "SSH Agent is ready"
+        sh 'ssh-add -L'
+        // ... other commands ...
         // Convert env.dockerImageTag to lowercase
-        def lowercaseImageTag = env.dockerImageTag.toLowerCase()
-        ssh user: 'ec2-user', host: '3.70.229.201', command: 'echo "Executing ls -la"'
-        ssh user: 'ec2-user', host: '3.70.229.201', command: 'ls -la'
+        //def lowercaseImageTag = env.dockerImageTag.toLowerCase()
+        //ssh user: 'ec2-user', host: '3.70.229.201', command: 'echo "Executing ls -la"'
+        //ssh user: 'ec2-user', host: '3.70.229.201', command: 'ls -la'
 
         // Debug statement for the Docker command
-        echo "Running Docker command: docker run -p 8080:8080 -d ${lowercaseImageTag}"
+        //echo "Running Docker command: docker run -p 8080:8080 -d ${lowercaseImageTag}"
 
         // ssh command with lowercase env.dockerImageTag
-        def remoteCommand = "docker run -p 8080:8080 -d ${lowercaseImageTag}"
-        ssh user: 'ec2-user', host: '3.70.229.201', command: remoteCommand
+        //def remoteCommand = "docker run -p 8080:8080 -d ${lowercaseImageTag}"
+        //ssh user: 'ec2-user', host: '3.70.229.201', command: remoteCommand
     }
 }
 
