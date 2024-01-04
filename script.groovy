@@ -60,47 +60,46 @@ def commitVersion() {
 }
 
 def deployApplication() {
-    def deployApplication() {
-        sshagent(['aws']) {
-            echo "SSH Agent is ready"
-            sh 'ssh-add -L'
+    sshagent(['aws']) {
+        echo "SSH Agent is ready"
+        sh 'ssh-add -L'
 
-            def ec2Host = '3.70.229.201'
-            def ec2User = 'ec2-user'
+        def ec2Host = '3.70.229.201'
+        def ec2User = 'ec2-user'
 
-            // Execute 'echo' command on EC2 instance
-            def echoCommand = "echo 'Executing ls -la'"
-            def echoResult = sshReturnStatus(executable: 'ssh', host: ec2Host, user: ec2User, command: echoCommand)
+        // Execute 'echo' command on EC2 instance
+        def echoCommand = "echo 'Executing ls -la'"
+        def echoResult = sshReturnStatus(executable: 'ssh', host: ec2Host, user: ec2User, command: echoCommand)
 
-            if (echoResult == 0) {
-                echo "Command 'echo' executed successfully on EC2 instance"
-            } else {
-                error "Error executing 'echo' command on EC2 instance. Exit code: ${echoResult}"
-            }
+        if (echoResult == 0) {
+            echo "Command 'echo' executed successfully on EC2 instance"
+        } else {
+            error "Error executing 'echo' command on EC2 instance. Exit code: ${echoResult}"
+        }
 
-            // Execute 'ls -la' command on EC2 instance
-            def lsCommand = 'ls -la'
-            def lsResult = sshReturnStatus(executable: 'ssh', host: ec2Host, user: ec2User, command: lsCommand)
+        // Execute 'ls -la' command on EC2 instance
+        def lsCommand = 'ls -la'
+        def lsResult = sshReturnStatus(executable: 'ssh', host: ec2Host, user: ec2User, command: lsCommand)
 
-            if (lsResult == 0) {
-                echo "Command 'ls -la' executed successfully on EC2 instance"
-            } else {
-                error "Error executing 'ls -la' command on EC2 instance. Exit code: ${lsResult}"
-            }
+        if (lsResult == 0) {
+            echo "Command 'ls -la' executed successfully on EC2 instance"
+        } else {
+            error "Error executing 'ls -la' command on EC2 instance. Exit code: ${lsResult}"
         }
     }
+}
 
 // Function to execute SSH command and return the exit status
-    def sshReturnStatus(Map options) {
-        return sh(script: """
+def sshReturnStatus(Map options) {
+    return sh(script: """
         ${options['executable']} \
         -o StrictHostKeyChecking=no \
         -i ${options['keyfile']} \
         ${options['user']}@${options['host']} \
         ${options['command']}
     """, returnStatus: true)
-    }
 }
+
 
 
 
