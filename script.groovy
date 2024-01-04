@@ -68,7 +68,7 @@ def deployApplication() {
         def ec2User = 'ec2-user'
 
         // Execute 'docker build' command on EC2 instance
-        def dockerBuildCommand = "docker build -p 8080:8080 -t ${env.dockerImageTag.toLowerCase()} ."
+        def dockerBuildCommand = "docker run -p 8080:8080 -t ${env.dockerImageTag.toLowerCase()} ."
         def dockerBuildResult = sshReturnStatus(executable: 'ssh', host: ec2Host, user: ec2User, command: dockerBuildCommand)
 
         if (dockerBuildResult == 0) {
