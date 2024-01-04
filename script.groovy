@@ -67,38 +67,21 @@ def deployApplication() {
         def ec2Host = '3.70.229.201'
         def ec2User = 'ec2-user'
 
-        // Execute 'echo' command on EC2 instance
-        def echoCommand = "echo 'Executing ls -la'"
-        def echoResult = sshReturnStatus(executable: 'ssh', host: ec2Host, user: ec2User, command: echoCommand)
+        // Execute 'docker build' command on EC2 instance
+        def dockerBuildCommand = "docker build -p 8080:8080 -t ${env.dockerImageTag.toLowerCase()} ."
+        def dockerBuildResult = sshReturnStatus(executable: 'ssh', host: ec2Host, user: ec2User, command: dockerBuildCommand)
 
-        if (echoResult == 0) {
-            echo "Command 'echo' executed successfully on EC2 instance"
+        if (dockerBuildResult == 0) {
+            echo "Docker build command executed successfully on EC2 instance"
         } else {
-            error "Error executing 'echo' command on EC2 instance. Exit code: ${echoResult}"
+            error "Error executing Docker build command on EC2 instance. Exit code: ${dockerBuildResult}"
         }
 
-        // Execute 'ls -la' command on EC2 instance
-        def lsCommand = 'ls -la'
-        def lsResult = sshReturnStatus(executable: 'ssh', host: ec2Host, user: ec2User, command: lsCommand)
-
-        if (lsResult == 0) {
-            echo "Command 'ls -la' executed successfully on EC2 instance"
-        } else {
-            error "Error executing 'ls -la' command on EC2 instance. Exit code: ${lsResult}"
-        }
+        // You can add more commands to execute on the EC2 instance here...
     }
 }
 
-// Function to execute SSH command and return the exit status
-def sshReturnStatus(Map options) {
-    return sh(script: """
-        ${options['executable']} \
-        -o StrictHostKeyChecking=no \
-        -i ${options['keyfile']} \
-        ${options['user']}@${options['host']} \
-        ${options['command']}
-    """, returnStatus: true)
-}
+
 
 
 
