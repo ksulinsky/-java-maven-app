@@ -60,22 +60,45 @@ def commitVersion() {
 }
 
 def deployApplication() {
-    sshagent(['aws']) {
-        // ... other commands ...
-        echo "SSH Agent is ready"
-        sh 'ssh-add -L'
-        // ... other commands ...
-        // Convert env.dockerImageTag to lowercase
-        //def lowercaseImageTag = env.dockerImageTag.toLowerCase()
-        ssh user: 'ec2-user', host: '3.70.229.201', command: 'echo "Executing ls -la"'
-        ssh user: 'ec2-user', host: '3.70.229.201', command: 'ls -la'
+    def deployApplication() {
+        sshagent(['aws']) {
+            echo "SSH Agent is ready"
+            sh 'ssh-add -L'
 
-        // Debug statement for the Docker command
-        //echo "Running Docker command: docker run -p 8080:8080 -d ${lowercaseImageTag}"
+            def ec2Host = '3.70.229.201'
+            def ec2User = 'ec2-user'
 
-        // ssh command with lowercase env.dockerImageTag
-        //def remoteCommand = "docker run -p 8080:8080 -d ${lowercaseImageTag}"
-        //ssh user: 'ec2-user', host: '3.70.229.201', command: remoteCommand
+            // Execute 'echo' command on EC2 instance
+            def echoCommand = "echo 'Executing ls -la'"
+            def echoResult = sshReturnStatus(executable: 'ssh', host: ec2Host, user: ec2User, command: echoCommand)
+
+            if (echoResult == 0) {
+                echo "Command 'echo' executed successfully on EC2 instance"
+            } else {
+                error "Error executing 'echo' command on EC2 instance. Exit code: ${echoResult}"
+            }
+
+            // Execute 'ls -la' command on EC2 instance
+            def lsCommand = 'ls -la'
+            def lsResult = sshReturnStatus(executable: 'ssh', host: ec2Host, user: ec2User, command: lsCommand)
+
+            if (lsResult == 0) {
+                echo "Command 'ls -la' executed successfully on EC2 instance"
+            } else {
+                error "Error executing 'ls -la' command on EC2 instance. Exit code: ${lsResult}"
+            }
+        }
+    }
+
+// Function to execute SSH command and return the exit status
+    def sshReturnStatus(Map options) {
+        return sh(script: """
+        ${options['executable']} \
+        -o StrictHostKeyChecking=no \
+        -i ${options['keyfile']} \
+        ${options['user']}@${options['host']} \
+        ${options['command']}
+    """, returnStatus: true)
     }
 }
 
