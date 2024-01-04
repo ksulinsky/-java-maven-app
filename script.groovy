@@ -80,6 +80,16 @@ def deployApplication() {
         // You can add more commands to execute on the EC2 instance here...
     }
 }
+// Function to execute SSH command and return the exit status
+def sshReturnStatus(Map options) {
+    return sh(script: """
+        ${options['executable']} \
+        -o StrictHostKeyChecking=no \
+        -i ${options['keyfile']} \
+        ${options['user']}@${options['host']} \
+        ${options['command']}
+    """, returnStatus: true)
+}
 
 
 
