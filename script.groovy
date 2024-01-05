@@ -66,30 +66,16 @@ def deployApplication() {
 
         def ec2Host = '3.70.229.201'
         def ec2User = 'ec2-user'
+// Copy 'docker-compose.yaml' to EC2 instance
+        sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2User}@${ec2Host}:/home/ec2-user"
 
-        // Execute 'docker build' command on EC2 instance
-        def dockerBuildCommand = "docker build -p 8080:8080 -t ${env.dockerImageTag.toLowerCase()} ."
-        def dockerBuildResult = sshReturnStatus(executable: 'ssh', host: ec2Host, user: ec2User, command: dockerBuildCommand)
+        // Execute 'docker compose up' command on EC2 instance
+        def dockerComposeCommand = "docker-compose up -d"
+        sh "ssh -o StrictHostKeyChecking=no ${ec2User}@${ec2Host} '${dockerComposeCommand}'"
 
-        if (dockerBuildResult == 0) {
-            echo "Docker build command executed successfully on EC2 instance"
-        } else {
-            error "Error executing Docker build command on EC2 instance. Exit code: ${dockerBuildResult}"
-        }
-
-        // You can add more commands to execute on the EC2 instance here...
-    }
 }
-// Function to execute SSH command and return the exit status
-def sshReturnStatus(Map options) {
-    return sh(script: """
-        ${options['executable']} \
-        -o StrictHostKeyChecking=no \
-        -i ${options['keyfile']} \
-        ${options['user']}@${options['host']} \
-        ${options['command']}
-    """, returnStatus: true)
-}
+
+
 
 
 
