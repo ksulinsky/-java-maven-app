@@ -74,8 +74,8 @@ def deployApplication() {
         sh "ssh -o StrictHostKeyChecking=no ${ec2User}@${ec2Host} '${dockerComposeCommand}'"
 
         // Execute 'docker build' command on EC2 instance
-        def dockerBuildCommand = "docker run -p 8080:8080 -d ${env.dockerImageTag.toLowerCase()} ."
-        def dockerBuildResult = sshReturnStatus(executable: 'ssh', host: ec2Host, user: ec2User, command: dockerBuildCommand)
+        //def dockerBuildCommand = "docker run -p 8080:8080 -d ${env.dockerImageTag.toLowerCase()} ."
+        //def dockerBuildResult = sshReturnStatus(executable: 'ssh', host: ec2Host, user: ec2User, command: dockerBuildCommand)
 
 
     }
