@@ -11,7 +11,7 @@ def buildDockerImage() {
 
     withCredentials([usernamePassword(credentialsId: 'docker-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
         echo 'Building docker image and pushing it...'
-        sh "docker build -t ${dockerImageTag} ."
+        sh "docker build -d ${dockerImageTag} ."
         sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
         sh "docker push ${dockerImageTag} "
     }
