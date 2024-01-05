@@ -69,9 +69,15 @@ def deployApplication() {
 // Copy 'docker-compose.yaml' to EC2 instance
         sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2User}@${ec2Host}:/home/ec2-user"
 
+<<<<<<< HEAD
         // Execute 'docker compose up' command on EC2 instance
         def dockerComposeCommand = "docker-compose up -d"
         sh "ssh -o StrictHostKeyChecking=no ${ec2User}@${ec2Host} '${dockerComposeCommand}'"
+=======
+        // Execute 'docker build' command on EC2 instance
+        def dockerBuildCommand = "docker run -p 8080:8080 -d ${env.dockerImageTag.toLowerCase()} ."
+        def dockerBuildResult = sshReturnStatus(executable: 'ssh', host: ec2Host, user: ec2User, command: dockerBuildCommand)
+>>>>>>> bed24ba5e223117e03ccc57da3b4f013670b45d5
 
 }
 
