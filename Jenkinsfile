@@ -34,19 +34,6 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            environment {
-                // customScript.buildDockerImage()
-                AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
-                AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
-            }
-            steps {
-                script {
-                    echo "Deploying kubernetes image..."
-                    sh "kubectl create deployment nginx-deployment --image=nginx"
-                }
-            }
-        }
         stage('Deploy to EKS') {
     environment {
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
