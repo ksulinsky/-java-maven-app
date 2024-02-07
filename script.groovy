@@ -1,3 +1,4 @@
+def dockerImageTag
 def build_app() {
     echo 'Building...'
     sh "mvn package"
