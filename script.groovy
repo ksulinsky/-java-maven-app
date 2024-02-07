@@ -6,8 +6,8 @@ def build_app() {
 def buildDockerImage() {
     // Bind the Docker credentials
     def mavenVersion = sh(script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true).trim()
-    def dockerImageTag = "ksulinsky/repository:jma-${mavenVersion}"
-    echo "Building docker image with tag: ${dockerImageTag}" as global variable
+    dockerImageTag = "ksulinsky/repository:jma-${mavenVersion}"
+    echo "Building docker image with tag: ${dockerImageTag}"
 
     withCredentials([usernamePassword(credentialsId: 'docker-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
         echo 'Building docker image and pushing it...'
