@@ -7,6 +7,7 @@ pipeline {
 
     environment {
         DOCKER_CREDENTIALS = credentials('docker-credentials')
+        DOCKER_IMAGE_TAG = ''
     }
 
     stages {
