@@ -48,18 +48,13 @@ pipeline {
             // Configure AWS CLI
             sh "aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}"
             sh "aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}"
-            sh "aws configure set region ${AWS_REGION}"
-            
-            // Authenticate to EKS cluster
-            sh "aws eks --region ${AWS_REGION} update-kubeconfig --name ${EKS_CLUSTER_NAME}"
+            sh "aws configure set region ${AWS_REGION}" 
 
-            // Verify kubectl configuration
-            sh "kubectl config get-contexts"
-            
-            // Deploy your application using kubectl
-            sh "kubectl create deployment nginx-deployment --image=nginx"
-            
-            // Optionally, expose the deployment as a service
+            // Configure terraform
+            dir('your/directory') {
+                    // Execute your script
+                    sh 'terraform init'
+                    sh 'terraform apply --auto-aprove'
         }
     }
 }
