@@ -50,7 +50,7 @@ pipeline {
                     sh "aws configure set region ${AWS_REGION}" 
 
                     // Configure terraform
-                    dir('your/directory') {
+                    dir('terraform') {
                         // Execute your script
                         sh 'terraform init'
                         sh 'terraform apply --auto-approve'
